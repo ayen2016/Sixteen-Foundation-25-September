@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Sixteen Foundation</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+
+
+</head>
+<body>
+
+<!-- Navigation bar start  -->
+
+<header class="six_foundation_nav-header">
+    <div class="six_foundation_nav-container">
+        <div class="six_foundation_nav-logo">
+            <a href="#"><img src="img/SF-Logo-main-300x38-w.png" alt="Logo"></a>
+        </div>
+
+        <div class="six_foundation_nav-right">
+            <ul class="six_foundation_nav-menu">
+                <li class="six_foundation_nav-item"><a href="index.html" class="six_foundation_nav-link">Home</a></li>
+               
+                <li class="six_foundation_nav-item">
+                    <a href="Blog.html" class="six_foundation_nav-link">Blog</a>
+                    <ul class="six_foundation_nav-dropdown">
+                        <li><a href="#" class="six_foundation_nav-dropdown-item">Donation</a></li>
+                        <li><a href="#" class="six_foundation_nav-dropdown-item">Podcast</a></li>
+                        <li><a href="#" class="six_foundation_nav-dropdown-item">Event</a></li>
+                    </ul>
+                </li>
+                <li class="six_foundation_nav-item"><a href="About Us.html" class="six_foundation_nav-link">About</a></li>
+                <li class="six_foundation_nav-item"><a href="Contact.html" class="six_foundation_nav-link">Contact</a></li>
+            </ul>
+
+            <button class="six_foundation_nav-donate-btn">Donate Now <i class="fas fa-arrow-right"></i></button>
+            <button class="six_foundation_nav-mobile-toggle"><i class="fas fa-bars"></i></button>
+        </div>
+    </div>
+</header>
+
+<!-- Mobile Menu -->
+<div class="six_foundation_nav-mobile-menu">
+    <div class="six_foundation_nav-mobile-header">
+        <div class="six_foundation_nav-logo">
+            <a href="#"><img src="img/Mobile menu logo.png" alt="Logo"></a>
+        </div>
+        <button class="six_foundation_nav-mobile-close"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="six_foundation_nav-mobile-nav">
+        <div class="six_foundation_nav-mobile-item"><a href="index.html" class="six_foundation_nav-mobile-link">Home</a></div>
+        
+        <div class="six_foundation_nav-mobile-item">
+            <a href="Blog.html" class="six_foundation_nav-mobile-link">Blog</a>
+            <button class="six_foundation_nav-dropdown-toggle"><i class="fas fa-chevron-down"></i></button>
+            <div class="six_foundation_nav-mobile-dropdown">
+                <a href="#" class="six_foundation_nav-mobile-dropdown-item">Web Development</a>
+                <a href="#" class="six_foundation_nav-mobile-dropdown-item">App Development</a>
+                <a href="#" class="six_foundation_nav-mobile-dropdown-item">Marketing</a>
+            </div>
+        </div>
+        <div class="six_foundation_nav-mobile-item"><a href="Blog.html" class="six_foundation_nav-mobile-link">Blog</a></div>
+        <div class="six_foundation_nav-mobile-item"><a href="#" class="six_foundation_nav-mobile-link">Contact</a></div>
+    </div>
+    <div class="six_foundation_nav-mobile-footer">
+        <button class="six_foundation_nav-mobile-donate-btn">Donate Now <i class="fas fa-arrow-right"></i></button>
+    </div>
+</div>
+
+<div class="six_foundation_nav-backdrop"></div>
+
+<script>
+// Navbar scroll
+window.addEventListener('scroll', () => {
+    const header = document.querySelector('.six_foundation_nav-header');
+    if(window.scrollY > 50) header.classList.add('scrolled');
+    else header.classList.remove('scrolled');
+});
+
+// Mobile menu
+const mobileToggle = document.querySelector('.six_foundation_nav-mobile-toggle');
+const mobileMenu = document.querySelector('.six_foundation_nav-mobile-menu');
+const mobileClose = document.querySelector('.six_foundation_nav-mobile-close');
+const backdrop = document.querySelector('.six_foundation_nav-backdrop');
+
+mobileToggle.addEventListener('click', () => {
+    mobileMenu.classList.add('active');
+    backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+});
+
+function closeMobileMenu(){
+    mobileMenu.classList.remove('active');
+    backdrop.classList.remove('active');
+    document.body.style.overflow = '';
+    document.querySelectorAll('.six_foundation_nav-mobile-item').forEach(item => {
+        item.classList.remove('active');
+        const icon = item.querySelector('.six_foundation_nav-dropdown-toggle i');
+        if(icon) icon.style.transform = 'rotate(0)';
+    });
+}
+
+mobileClose.addEventListener('click', closeMobileMenu);
+backdrop.addEventListener('click', closeMobileMenu);
+
+// Mobile submenu toggle
+const dropdownToggles = document.querySelectorAll('.six_foundation_nav-dropdown-toggle');
+dropdownToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const parentItem = toggle.closest('.six_foundation_nav-mobile-item');
+
+        // Close other open submenus
+        document.querySelectorAll('.six_foundation_nav-mobile-item.active').forEach(item => {
+            if (item !== parentItem) {
+                item.classList.remove('active');
+                const icon = item.querySelector('.six_foundation_nav-dropdown-toggle i');
+                if(icon) icon.style.transform = 'rotate(0)';
+            }
+        });
+
+        // Toggle current submenu
+        parentItem.classList.toggle('active');
+
+        // Rotate chevron
+        const icon = toggle.querySelector('i');
+        icon.style.transform = parentItem.classList.contains('active') 
+            ? 'rotate(180deg)' 
+            : 'rotate(0)';
+    });
+});
+
+// Close mobile menu when clicking on links
+document.querySelectorAll('.six_foundation_nav-mobile-link, .six_foundation_nav-mobile-dropdown-item').forEach(link => {
+    link.addEventListener('click', (e) => {
+        if (!link.nextElementSibling || !link.nextElementSibling.classList.contains('six_foundation_nav-mobile-dropdown')) {
+            closeMobileMenu();
+        }
+    });
+});
+
+// Reset on resize
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 992) {
+        closeMobileMenu();
+    }
+});
+</script>
+
+
+
+
+<!-- Navigation bar stop -->
+
+
+
+<!-- hero Section Start -->
+
+<section class="hero-section">
+    <div class="hero-content">
+        <h1>Your Impact, Our Support</h1>
+        <p>Smart, innovative solutions to help your donations make a bigger difference.</p>
+        <a href="#get-started" class="hero-btn">Get Started </a>
+    </div>
+</section>
+
+<!-- Hero Section Stop -->
+
+
+<!-- Row Section Start -->
+
+
+<div class="row">
+  <a href="#" class="card theme-early">
+    <h3>What We Do</h3>
+    <p>To assist existing educational institutions and allow them to provide high quality education for their learners. We believe every child matters.</p>
+  </a>
+
+  <a href="#" class="card theme-school">
+    <h3>What We Do?</h3>
+    <p>We support educational institutions with financial assistance for resources that enhance the education of children in the UK and abroad.</p>
+  </a>
+
+  <a href="#" class="card theme-futures">
+    <h3>How can you help?</h3>
+    <p>Join us and get involved through volunteering in our events, or through monetary donations and collectively spreading the word.</p>
+  </a>
+</div>
+
+
+<!-- Row Section Stop -->
+
+
+
+<!-- home donation Video Section Start -->
+
+
+<section class="home_pg_main_vdo">
+  <div class="container">
+    <h2 class="home_pg_main_vdo__heading">SEE HOW YOUR DONATIONS MAKE A DIFFERENCE</h2>
+    <p class="home_pg_main_vdo__text">
+      The Prophet Muhammad (PBUH) said: <br> "Give charity without delay, for it stands in the way of calamity." — Al-Tirmidhi 589 
+    </p>
+    <div class="home_pg_main_vdo__video-wrapper">
+      <img 
+        src="img/thumbnil.jpg" 
+        alt="Video Thumbnail" 
+        class="home_pg_main_vdo__thumbnail"
+      >
+      <button class="home_pg_main_vdo__play-btn">&#9654;</button>
+      <video class="home_pg_main_vdo__video" controls>
+        <source src="video/Kids Happy.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+</section>
+
+<script>
+const wrapper = document.querySelector('.home_pg_main_vdo__video-wrapper');
+const playBtn = wrapper.querySelector('.home_pg_main_vdo__play-btn');
+const thumbnail = wrapper.querySelector('.home_pg_main_vdo__thumbnail');
+const video = wrapper.querySelector('.home_pg_main_vdo__video');
+
+playBtn.addEventListener('click', () => {
+  thumbnail.style.display = 'none';
+  playBtn.style.display = 'none';
+  video.style.display = 'block';
+  video.play();
+});
+</script>
+
+
+<!-- home donation Video Section End -->
+
+
+<!-- home page donate section start -->
+
+
+
+<section class="home_pg_donate_section">
+  <h2>LET US MAKE THE WORLD BETTER TOGETHER</h2>
+  <p class="section-text">The Prophet Muhammad (PBUH) said: <br> "When a person dies, his deeds come to an end except for three: Sadaqah Jariyah (a continuous charity), knowledge which is beneficial, or a virtuous descendant who prays for him (for the deceased)." — Sahih Muslim 1631 </p>
+
+  <div class="home_pg_donate_grid">
+    <!-- Card 1 -->
+    <div class="home_pg_donate_card">
+      <img src="img/gaza fundrising.jpg" alt="Cause 1">
+      <div class="content">
+        <h3>Cause Title 1</h3>
+        <p class="description">This is a sample description of the cause. All cards have the same length of text to keep them uniform visually.</p>
+        <div class="progress-bar">
+          <div class="progress-bar-inner" style="width: 50%;"></div>
+        </div>
+        <p class="progress-text">Raised $5,000 of $10,000</p>
+        <button>Donate Now</button>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="home_pg_donate_card">
+      <img src="img/sixteen foundation blog 2.jpg" alt="Cause 2">
+      <div class="content">
+        <h3>Cause Title 2</h3>
+        <p class="description">This is a sample description of the cause. All cards have the same length of text to keep them uniform visually.</p>
+        <div class="progress-bar">
+          <div class="progress-bar-inner" style="width: 30%;"></div>
+        </div>
+        <p class="progress-text">Raised $3,000 of $10,000</p>
+        <button>Donate Now</button>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="home_pg_donate_card">
+      <img src="img/Madrasha Mauritania.jpg" alt="Cause 3">
+      <div class="content">
+        <h3>Cause Title 3</h3>
+        <p class="description">This is a sample description of the cause. All cards have the same length of text to keep them uniform visually.</p>
+        <div class="progress-bar">
+          <div class="progress-bar-inner" style="width: 70%;"></div>
+        </div>
+        <p class="progress-text">Raised $7,000 of $10,000</p>
+        <button>Donate Now</button>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="home_pg_donate_card">
+      <img src="img/medium-shot-kids-laying-together.jpg" alt="Cause 4">
+      <div class="content">
+        <h3>Cause Title 4</h3>
+        <p class="description">This is a sample description of the cause. All cards have the same length of text to keep them uniform visually.</p>
+        <div class="progress-bar">
+          <div class="progress-bar-inner" style="width: 60%;"></div>
+        </div>
+        <p class="progress-text">Raised $6,000 of $10,000</p>
+        <button>Donate Now</button>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="home_pg_donate_card">
+      <img src="img/sixteen foundation blog 1.jpg" alt="Cause 5">
+      <div class="content">
+        <h3>Cause Title 5</h3>
+        <p class="description">This is a sample description of the cause. All cards have the same length of text to keep them uniform visually.</p>
+        <div class="progress-bar">
+          <div class="progress-bar-inner" style="width: 40%;"></div>
+        </div>
+        <p class="progress-text">Raised $4,000 of $10,000</p>
+        <button>Donate Now</button>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="home_pg_donate_card">
+      <img src="img/hero image new.jpg" alt="Cause 6">
+      <div class="content">
+        <h3>Cause Title 6</h3>
+        <p class="description">This is a sample description of the cause. All cards have the same length of text to keep them uniform visually.</p>
+        <div class="progress-bar">
+          <div class="progress-bar-inner" style="width: 80%;"></div>
+        </div>
+        <p class="progress-text">Raised $8,000 of $10,000</p>
+        <button>Donate Now</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- home page donate section stop -->
+
+
+<!-- home page timeline section start -->
+
+
+<section class="history-section">
+  <div class="content-wrapper">
+    <h2>Our History</h2>
+    <p class="section-text" id="history-text">
+      Check out the key milestones of our journey over the years.
+    </p>
+
+    <div class="timeline" id="timeline">
+      <div class="timeline-item active" data-index="0"><div class="year">1994</div></div>
+      <div class="timeline-item" data-index="1"><div class="year">2006</div></div>
+      <div class="timeline-item" data-index="2"><div class="year">2013</div></div>
+      <div class="timeline-item" data-index="3"><div class="year">2019</div></div>
+      <div class="timeline-item" data-index="4"><div class="year">2022</div></div>
+      <div class="timeline-item" data-index="5"><div class="year">2023</div></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const historyTexts = [
+    "In 1994, our organization was founded with a mission to bring positive change.",
+    "In 2006, we expanded our services to reach new communities.",
+    "In 2013, we launched several key initiatives to empower local youth.",
+    "In 2019, we celebrated 25 years of impact and growth.",
+    "In 2022, we started an international outreach program.",
+    "In 2023, we introduced innovative solutions to further our mission."
+  ];
+
+  const textEl = document.getElementById('history-text');
+  const timelineItems = document.querySelectorAll('.timeline-item');
+
+  timelineItems.forEach(item => {
+    item.addEventListener('click', () => {
+      timelineItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const index = item.dataset.index;
+      textEl.style.opacity = 0;
+      setTimeout(() => {
+        textEl.textContent = historyTexts[index];
+        textEl.style.opacity = 1;
+      }, 200);
+    });
+  });
+</script>
+
+
+<!-- Home page timeline section stop -->
+
+
+
+<!-- Home Page podcast section start -->
+
+
+
+<div class="home_pd_pod-section_bg">
+
+  <section class="home_pd_pod-section">
+
+    <div class="home_pd_pod-hero">
+      <div class="home_pd_pod-text">
+        <h2>Our Podcast Sessions</h2>
+        <p>Join us in this inspiring session where we talk about the power of giving back as students. From real-life stories to impactful interviews, we explore how student-led donations are making a difference in communities.</p>
+      </div>
+
+      <!-- Hero Video with Thumbnail & Play Button -->
+      <div class="home_pd_pod-video-wrapper">
+        <img src="img/Podcast Thumbnil.bmp" alt="Video Thumbnail" class="home_pd_pod-video-thumbnail">
+        <button class="home_pd_pod-video-play-btn">&#9654;</button>
+        <video class="home_pd_pod-video" controls>
+          <source src="video/Podcast Video.mov" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </div>
+
+    <!-- Upcoming Episodes -->
+    <h3 class="home_pd_pod-upcoming-title">Upcoming Episodes</h3>
+    <div class="home_pd_pod-upcoming-banners">
+
+      <div class="home_pd_pod-banner-card">
+        <img src="https://picsum.photos/id/1042/400/200" alt="Episode 4">
+        <div class="home_pd_pod-banner-text">
+          <h4>Episode 4: Future Trends</h4>
+          <p>Release Date: Oct 5, 2025</p>
+          <button>Listen Now</button>
+        </div>
+      </div>
+
+      <div class="home_pd_pod-banner-card">
+        <img src="https://picsum.photos/id/1043/400/200" alt="Episode 5">
+        <div class="home_pd_pod-banner-text">
+          <h4>Episode 5: Special Guest</h4>
+          <p>Release Date: Oct 12, 2025</p>
+          <button>Listen Now</button>
+        </div>
+      </div>
+
+      <div class="home_pd_pod-banner-card">
+        <img src="https://picsum.photos/id/1044/400/200" alt="Episode 6">
+        <div class="home_pd_pod-banner-text">
+          <h4>Episode 6: Behind the Scenes</h4>
+          <p>Release Date: Oct 19, 2025</p>
+          <button>Listen Now</button>
+        </div>
+      </div>
+
+      <div class="home_pd_pod-banner-card">
+        <img src="https://picsum.photos/id/1045/400/200" alt="Episode 7">
+        <div class="home_pd_pod-banner-text">
+          <h4>Episode 7: Tech Insights</h4>
+          <p>Release Date: Oct 26, 2025</p>
+          <button>Listen Now</button>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const heroWrapper = document.querySelector('.home_pd_pod-video-wrapper');
+  const video = heroWrapper.querySelector('.home_pd_pod-video');
+  const playBtn = heroWrapper.querySelector('.home_pd_pod-video-play-btn');
+  const thumbnail = heroWrapper.querySelector('.home_pd_pod-video-thumbnail');
+
+  // If no thumbnail, show video automatically
+  if (!thumbnail) {
+    video.style.display = 'block';
+    if (playBtn) playBtn.style.display = 'none';
+  }
+
+  if (playBtn) {
+    playBtn.addEventListener('click', () => {
+      // Show video first
+      video.style.display = 'block';
+
+      // Hide thumbnail & play button
+      if (thumbnail) thumbnail.style.display = 'none';
+      playBtn.style.display = 'none';
+
+      // Play video
+      video.play().catch(err => {
+        console.log('Video play was blocked:', err);
+      });
+    });
+  }
+});
+</script>
+
+
+<!-- Home page podcast section stop -->
+
+
+
+<!-- Home Page Blog Section Start  -->
+
+
+<div class="home_pg_blog_section_bg">
+
+
+<section class="home_pg_blog_section">
+  <h2>OUR LATEST BLOGS</h2>
+  <p class="section-text">Stay updated with our latest news, stories, and insights on student-led initiatives and community impact.</p>
+
+  <div class="home_pg_blog_grid">
+    <!-- Blog Card 1 -->
+    <div class="home_pg_blog_card">
+      <img src="img/event1.jpg" alt="Blog 1">
+      <div class="content">
+        <h3>Blog Title 1</h3>
+        <p class="excerpt">This is a short excerpt of the blog post to give readers an idea about the content.</p>
+        <button>Read More</button>
+      </div>
+    </div>
+
+    <!-- Blog Card 2 -->
+    <div class="home_pg_blog_card">
+      <img src="img/event2.jpg" alt="Blog 2">
+      <div class="content">
+        <h3>Blog Title 2</h3>
+        <p class="excerpt">This is a short excerpt of the blog post to give readers an idea about the content.</p>
+        <button>Read More</button>
+      </div>
+    </div>
+
+    <!-- Blog Card 3 -->
+    <div class="home_pg_blog_card">
+      <img src="img/event3.jpg" alt="Blog 3">
+      <div class="content">
+        <h3>Blog Title 3</h3>
+        <p class="excerpt">This is a short excerpt of the blog post to give readers an idea about the content.</p>
+        <button>Read More</button>
+      </div>
+    </div>
+
+    
+    <!-- <div class="home_pg_blog_card">
+      <img src="img/blog4.jpg" alt="Blog 4">
+      <div class="content">
+        <h3>Blog Title 4</h3>
+        <p class="excerpt">This is a short excerpt of the blog post to give readers an idea about the content.</p>
+        <button>Read More</button>
+      </div>
+    </div>
+
+   
+    <div class="home_pg_blog_card">
+      <img src="img/blog5.jpg" alt="Blog 5">
+      <div class="content">
+        <h3>Blog Title 5</h3>
+        <p class="excerpt">This is a short excerpt of the blog post to give readers an idea about the content.</p>
+        <button>Read More</button>
+      </div>
+    </div>
+
+    
+    <div class="home_pg_blog_card">
+      <img src="img/blog6.jpg" alt="Blog 6">
+      <div class="content">
+        <h3>Blog Title 6</h3>
+        <p class="excerpt">This is a short excerpt of the blog post to give readers an idea about the content.</p>
+        <button>Read More</button>
+      </div>
+    </div> -->
+
+
+
+
+  </div>
+
+
+  <div class="home_pg_blog_more_btn_wrapper">
+
+  <a href="Blog.html"> <button class="home_pg_blog_more_btn">More Blogs</button> </a>
+
+  </div>
+
+
+</section>
+
+
+</div>
+
+
+<!-- Home Page Blog Section Stop -->
+
+
+
+
+
+
+<!-- Footer Start -->
+
+
+
+<footer class="don-ft">
+  <div class="don-ft-inner">
+
+    <!-- Widgets Grid -->
+    <div class="don-ft-grid">
+
+      <!-- About -->
+      <div class="don-ft-widget about">
+        <a href="index.html"><img src="img/SF-Logo-main-300x38-w.png" alt="Donation Site Logo" class="don-ft-logo"></a>
+        <p>We are a Community Organisation run by a group of volunteers.  We have a strong purpose of empowering lives through education.</p>
+        <div class="don-ft-social">
+          <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="don-ft-widget links">
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="About Us.html">About Us</a></li>
+          <li><a href="Blog.html">Our Causes</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="donate.html">Donate</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact -->
+      <div class="don-ft-widget contact">
+        <h5>Contact Us</h5>
+        <ul>
+          <li><i class="fa-regular fa-envelope"></i><a href="mailto:info@donationsite.org">info@sixteenfoundation.org</a></li>
+          <li><i class="fa-solid fa-phone"></i><a href="tel:+123456789">+1 234 567 89</a></li>
+          <li><i class="fa-solid fa-location-dot"></i>123 Hope Street, City, Country</li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="don-ft-widget newsletter">
+        <h5>Newsletter</h5>
+        <p>Subscribe to get updates on our missions and stories of change.</p>
+        <form class="newsletter-form" action="newsletter.php" method="post">
+          <input type="email" name="email" placeholder="Enter your email" required>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+
+      <!-- Legal -->
+      <div class="don-ft-widget legal">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms & Conditions</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="don-ft-copy">
+      <p>© 2025 Donation Site. All rights reserved.</p>
+    </div>
+
+  </div>
+</footer>
+
+
+
+
+<!-- footer stop -->
+
+
+
+</body>
+</html>
+
+
+
+
